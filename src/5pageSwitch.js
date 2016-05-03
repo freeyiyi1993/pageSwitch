@@ -75,11 +75,11 @@
                     up:3,
                     cancel:3
                 };
-            each("mouse touch pointer MSPointer-".split(" "),function(prefix){
+            $.each("mouse touch pointer MSPointer-".split(" "),function(i, prefix){
                 var _prefix=/pointer/i.test(prefix)?'pointer':prefix;
                 ret[_prefix]=ret[_prefix]||{};
                 POINTERTYPES[_prefix]=_prefix;
-                each(states,function(endfix,code){
+                $.each(states,function(endfix,code){
                     var ev=camelCase(prefix+endfix);
                     ret[_prefix][ev]=code;
                     event2type[ev.toLowerCase()]=_prefix;
@@ -128,11 +128,11 @@
             }
         };
 
-    each("Boolean Number String Function Array Date RegExp Object Error".split(" "),function(name){
+    $.each("Boolean Number String Function Array Date RegExp Object Error".split(" "),function(i, name){
         class2type["[object "+name+"]"]=name.toLowerCase();
     });
 
-    each("X Y ".split(" "),function(name){
+    $.each("X Y ".split(" "),function(i, name){
         var XY={X:'left',Y:'top'},
             fire3D=perspective?' translateZ(0)':'';
 
@@ -185,7 +185,7 @@
                     container.appendChild(wrap);
                 },
                 fixBlock=function(cpage,tpage,pages,container){
-                    each(pages,function(page){
+                    $.each(pages,function(i, page){
                         if(page.parentNode==container)return;
                         if(cpage!=page && tpage!=page){
                             page.parentNode.style.display='none';
@@ -282,7 +282,7 @@
                     return wrap;
                 },
                 fixBlock=function(cpage,tpage,pages,container){
-                    each(pages,function(page){
+                    $.each(pages,function(i, page){
                         if(page.parentNode==container)return;
                         if(cpage!=page && tpage!=page){
                             page.parentNode.style.display=page._clone.parentNode.style.display='none';
@@ -395,7 +395,7 @@
             }else TRANSITION['scroll'+name].apply(this,arguments);
         }
 
-        each(" Reverse In Out".split(" "),function(type){
+        $.each(" Reverse In Out".split(" "),function(i, type){
             TRANSITION['scrollCover'+type+name]=function(cpage,cp,tpage,tp){
                 var prop=name||['X','Y'][this.direction],
                     zIndex=Number(type=='In'||!type&&cp<0||type=='Reverse'&&cp>0),
@@ -491,20 +491,6 @@
         });
     });
 
-    function type(obj){
-        if(obj==null){
-            return obj+"";
-        }
-
-        return typeof obj=='object'||typeof obj=='function' ? class2type[toString.call(obj)]||"object" :
-            typeof obj;
-    }
-
-    function isArrayLike(elem){
-        var tp=type(elem);
-        return !!elem && tp!='function' && tp!='string' && (elem.length===0 || elem.length && (elem.nodeType==1 || (elem.length-1) in elem));
-    }
-
     function camelCase(str){
         return (str+'').replace(/^-ms-/, 'ms-').replace(/-([a-z]|[0-9])/ig, function(all, letter){
             return (letter+'').toUpperCase();
@@ -517,13 +503,9 @@
         return (prop in divstyle) && prop || (_prop in divstyle) && _prop || '';
     }
 
-    function isFunction(func){
-        return type(func)=='function';
-    }
-
     function pointerLength(obj){
         var len=0,key;
-        if(type(obj.length)=='number'){
+        if(typeof obj.length ==='number'){
             len=obj.length;
         }else if('keys' in Object){
             len=Object.keys(obj).length;
@@ -548,71 +530,6 @@
         }.call(obj,n);
     }
 
-    function each(arr, iterate){
-        if(isArrayLike(arr)){
-            if(type(arr.forEach)=='function'){
-                return arr.forEach(iterate);
-            }
-            var i=0,len=arr.length,item;
-            for(;i<len;i++){
-                item=arr[i];
-                if(type(item)!='undefined'){
-                    iterate(item,i,arr);
-                }
-            }
-        }else{
-            var key;
-            for(key in arr){
-                iterate(key,arr[key],arr);
-            }
-        }
-    }
-
-    function children(elem){
-        var ret=[];
-        each(elem.children||elem.childNodes,function(elem){
-            if(elem.nodeType==1){
-                ret.push(elem);
-            }
-        });
-        return ret;
-    }
-
-    function getStyle(elem,prop){
-        var style=ROOT.getComputedStyle&&ROOT.getComputedStyle(elem,null)||elem.currentStyle||elem.style;
-        return style[prop];
-    }
-
-    function addListener(elem,evstr,handler){
-        if(type(evstr)=='object'){
-            return each(evstr,function(evstr,handler){
-                addListener(elem,evstr,handler);
-            });
-        }
-        each(evstr.split(" "),function(ev){
-            if(elem.addEventListener){
-                elem.addEventListener(ev,handler,false);
-            }else if(elem.attachEvent){
-                elem.attachEvent('on'+ev,handler);
-            }else elem['on'+ev]=handler;
-        });
-    }
-
-    function offListener(elem,evstr,handler){
-        if(type(evstr)=='object'){
-            return each(evstr,function(evstr,handler){
-                offListener(elem,evstr,handler);
-            });
-        }
-        each(evstr.split(" "),function(ev){
-            if(elem.removeEventListener){
-                elem.removeEventListener(ev,handler,false);
-            }else if(elem.detachEvent){
-                elem.detachEvent('on'+ev,handler);
-            }else elem['on'+ev]=null;
-        });
-    }
-
     function removeRange(){
         var range;
         if(ROOT.getSelection){
@@ -630,7 +547,7 @@
             button=oldEvent.button,
             pointers,pointer;
 
-        each("wheelDelta detail which keyCode".split(" "),function(prop){
+        $.each("wheelDelta detail which keyCode".split(" "),function(i, prop){
             ev[prop]=oldEvent[prop];
         });
 
@@ -677,21 +594,7 @@
 
     // 构造函数
     function struct(config) {
-        this.init($.extend({
-            // defaultConfig
-            // mousewheel: true, // 是否支持鼠标滚轮滚动
-            // mouse: true, // 是否支持鼠标滚动
-            // arrowkey:true, // 是否支持键盘方向箭头
-            // direction: 0, // 方向: 0 代表向上 1 代表 向下 todo
-            // duration: 600, // 动画持续时间
-            // interval: 5000, // ？？ todo
-            // start:0, // 从第几页开始
-            // loop: true, // 默认循环滚动
-            // autoplay: true, // 是否自动播放
-            // freeze: false, // ？？？ todo
-            // transition: 'slide', // 默认 slide
-            // container: '#pages', // 容器选择器
-        }, config));
+        this.init($.extend({}, config));
     }
     // 原型方法
     struct.prototype={
@@ -716,15 +619,15 @@
             this.playing=!!config.autoplay;
             this.arrowkey=!!config.arrowkey;
             this.frozen=!!config.freeze;
-            this.pages=children(this.container);
+            this.pages=$(this.container).children('div');
             this.length=this.pages.length;
 
             this.pageData=[];
 
-            addListener(this.container,STARTEVENT.join(" ")+" click"+(this.mousewheel?" mousewheel DOMMouseScroll":""),handler);
-            addListener(DOC,MOVEEVENT.join(" ")+(this.arrowkey?" keydown":""),handler);
+            $(this.container).on(STARTEVENT.join(" ")+" click"+(this.mousewheel?" mousewheel DOMMouseScroll":""),handler);
+            $(window).on(MOVEEVENT.join(" ")+(this.arrowkey?" keydown":""),handler);
 
-            each(this.pages,function(page){
+            $.each(this.pages,function(i, page){
                 self.pageData.push({
                     percent:0,
                     cssText:page.style.cssText||''
@@ -733,15 +636,20 @@
             });
             this.pages[this.current].style.display='block';
 
-            this.on({
+            var progressEvents = {
                 before:function(){clearTimeout(this.playTimer);},
                 dragStart:function(){clearTimeout(this.playTimer);removeRange();},
                 after:this.firePlay,
                 update:null
-            }).firePlay();
-
-            this.comment=document.createComment(' Powered by pageSwitch v'+this.version+'  https://github.com/qiqiboy/pageSwitch ');
-            this.container.appendChild(this.comment);
+            };
+            $.each(progressEvents, function(ev, callback) {
+                if(!self.events[ev]){
+                    self.events[ev]=[];
+                }
+                self.events[ev].push(callback);
+            })
+            $(this.container).on(progressEvents);
+            this.firePlay();
 
             this.setEase(config.ease);
             this.setTransition(config.transition);
@@ -749,50 +657,36 @@
         initStyle:function(elem){
             var style=elem.style,
                 ret;
-            each("position:absolute;top:0;left:0;width:100%;height:100%;display:none".split(";"),function(css){
+            $.each("position:absolute;top:0;left:0;width:100%;height:100%;display:none".split(";"),function(i, css){
                 ret=css.split(":");
                 style[ret[0]]=ret[1];
             });
             return elem;
         },
         setEase:function(ease){
-            this.ease=isFunction(ease)?ease:EASE[ease]||EASE.ease;
+            this.ease=$.isFunction(ease)?ease:EASE[ease]||EASE.ease;
             return this;
         },
         addEase:function(name,func){
-            isFunction(func) && (EASE[name]=func);
+            $.isFunction(func) && (EASE[name]=func);
             return this;
         },
         setTransition:function(transition){
-            this.events.update.splice(0,1,isFunction(transition)?transition:TRANSITION[transition]||TRANSITION.slide);
+            this.events.update.splice(0,1,$.isFunction(transition)?transition:TRANSITION[transition]||TRANSITION.slide);
             return this;
         },
         addTransition:function(name,func){
-            isFunction(func) && (TRANSITION[name]=func);
+            $.isFunction(func) && (TRANSITION[name]=func);
             return this;
         },
         isStatic:function(){
             return !this.timer && !this.drag;
         },
-        on:function(ev,callback){
-            var self=this;
-            if(type(ev)=='object'){
-                each(ev,function(ev,callback){
-                    self.on(ev,callback);
-                });
-            }else{
-                if(!this.events[ev]){
-                    this.events[ev]=[];
-                }
-                this.events[ev].push(callback);
-            }
-            return this;
-        },
         fire:function(ev){
             var self=this,
                 args=slice.call(arguments,1);
-            each(this.events[ev]||[],function(func){
-                if(isFunction(func)){
+            $.each(this.events[ev]||[],function(i, func){
+                if($.isFunction(func)){
                     func.apply(self,args);
                 }
             });
@@ -882,7 +776,7 @@
             return this.length>1&&this.loop?(this.length+index)%this.length:index;
         },
         fixBlock:function(cIndex,tIndex){
-            each(this.pages,function(page,index){
+            $.each(this.pages,function(index, page){
                 if(cIndex!=index && tIndex!=index){
                     page.style.display='none';
                 }else{
@@ -907,7 +801,8 @@
             return pdata&&(pdata.percent||0);
         },
         getOffsetParent:function(){
-            var position=getStyle(this.container,'position');
+            // var position=getStyle(this.container,'position');
+            var position=$(this.container).css('position');
             if(position&&position!='static'){
                 return this.container;
             }
@@ -974,7 +869,7 @@
                             offset=this._offset;
                             isDrag=this.drag;
 
-                            each("rect drag time percent _offset offsetParent".split(" "),function(prop){
+                            $.each("rect drag time percent _offset offsetParent".split(" "),function(i, prop){
                                 delete self[prop];
                             });
 
@@ -1042,10 +937,11 @@
         destroy:function(){
             var pageData=this.pageData;
 
-            offListener(this.container,STARTEVENT.join(" ")+" click"+(this.mousewheel?" mousewheel DOMMouseScroll":""),this.handler);
-            offListener(DOC,MOVEEVENT.join(" ")+(this.arrowkey?" keydown":""),this.handler);
 
-            each(this.pages,function(page,index){
+            $(this.container).off(STARTEVENT.join(" ")+" click"+(this.mousewheel?" mousewheel DOMMouseScroll":""),this.handler);
+            $(DOC).off(MOVEEVENT.join(" ")+(this.arrowkey?" keydown":""),this.handler);
+
+            $.each(this.pages,function(index, page){
                 page.style.cssText=pageData[index].cssText;
             });
 
@@ -1098,15 +994,9 @@
         }
     }
     // todo why 可能是暴露给外部的方法  方便设置transition 和 ease
-    each("Ease Transition".split(" "),function(name){
+    $.each("Ease Transition".split(" "),function(i, name){
         struct['add'+name]=struct.prototype['add'+name];
     });
 
-    // if(typeof define=='function' && define.amd){
-    //     define('pageSwitch',function(){
-    //         return struct;
-    //     });
-    // }else
     ROOT.pageSwitch=struct;
-
 })(Zepto, window);
