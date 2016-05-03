@@ -1,0 +1,23 @@
+{
+  "name": "page-switc",
+  "version": "1.0.0",
+  "description": "[招聘] 与我一起工作 ========= > ［北京地区］国内最大美股券商 － [老虎证券](https://www.tigerbrokers.com)    ［地点］东三环亮马桥   ［职位］web前端开发工程师   ［要求］无。实习全职都可以。只求和我面基，看对眼   ［联系］我的github主页上邮箱 [qiqiboy](https://github.com/qiqiboy)",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/freeyiyi1993/pageSwitch.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/freeyiyi1993/pageSwitch/issues"
+  },
+  "homepage": "https://github.com/freeyiyi1993/pageSwitch#readme",
+  "devDependencies": {
+    "browser-sync": "^2.12.5",
+    "gulp": "^3.9.1"
+  }
+}
