@@ -49,7 +49,6 @@
         }(),
         toString=Object.prototype.toString,
         slice=[].slice,
-        class2type={},
         event2type={},
         event2code={
             click:4,
@@ -127,10 +126,6 @@
                 }
             }
         };
-
-    $.each("Boolean Number String Function Array Date RegExp Object Error".split(" "),function(i, name){
-        class2type["[object "+name+"]"]=name.toLowerCase();
-    });
 
     $.each("X Y ".split(" "),function(i, name){
         var XY={X:'left',Y:'top'},
@@ -594,7 +589,18 @@
 
     // 构造函数
     function struct(config) {
-        this.init($.extend({}, config));
+        this.init($.extend({
+            // default
+            duration:1000,
+            start:0,
+            direction:1,
+            loop:true,
+            ease:'ease',
+            freeze:false,
+            mouse:true,
+            mousewheel:true,
+            arrowkey:true
+        }, config));
     }
     // 原型方法
     struct.prototype={
