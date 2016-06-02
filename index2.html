@@ -179,23 +179,62 @@
 					<option value="bombCoverOutY">bombCoverOutY</option>
 				</optgroup>
 			</select>
-            <button style="color:red;" onclick="a.loop=!a.loop;if(a.loop){this.textContent='取消循环'}else{this.textContent='循环'}">循环</button>
-			<button onclick="a.prepend(createPage())">前增加一页</button>
-			<button onclick="a.append(createPage())">后增加一页</button>
-			<button onclick="a.remove(1)">删除第2页</button>
-			<button style="color:green;" onclick="a.setEase('bounce')">回弹效果</button>
-			<button style="background-color:black;color:white;" onclick="location.href='https://github.com/qiqiboy/pageSwitch'">Github</button>
+
+            <select id="ease">
+                <option value="linear">linear</option>
+                <option value="ease-in">ease-in</option>
+                <option value="ease-out">ease-out</option>
+                <option value="ease-in-out">ease-in-out</option>
+                <option value="bounce">bounce</option>
+                <option value="easeInQuad">easeInQuad</option>
+                <option value="easeOutQuad">easeOutQuad</option>
+                <option value="easeInOutQuad">easeInOutQuad</option>
+                <option value="easeInCubic">easeInCubic</option>
+                <option value="easeOutCubic">easeOutCubic</option>
+                <option value="easeInOutCubic">easeInOutCubic</option>
+                <option value="easeInQuart">easeInQuart</option>
+                <option value="easeOutQuart">easeOutQuart</option>
+                <option value="easeInOutQuart">easeInOutQuart</option>
+                <option value="easeInQuint">easeInQuint</option>
+                <option value="easeOutQuint">easeOutQuint</option>
+                <option value="easeInOutQuint">easeInOutQuint</option>
+                <option value="easeInSine">easeInSine</option>
+                <option value="easeOutSine">easeOutSine</option>
+                <option value="easeInOutSine">easeInOutSine</option>
+                <option value="easeInExpo">easeInExpo</option>
+                <option value="easeOutExpo">easeOutExpo</option>
+                <option value="easeInOutExpo">easeInOutExpo</option>
+                <option value="easeInCirc">easeInCirc</option>
+                <option value="easeOutCirc">easeOutCirc</option>
+                <option value="easeInOutCirc">easeInOutCirc</option>
+                <option value="easeInElastic">easeInElastic</option>
+                <option value="easeOutElastic">easeOutElastic</option>
+                <option value="easeInOutElastic">easeInOutElastic</option>
+                <option value="easeInBack">easeInBack</option>
+                <option value="easeOutBack">easeOutBack</option>
+                <option value="easeInOutBack">easeInOutBack</option>
+                <option value="easeInBounce">easeInBounce</option>
+                <option value="easeOutBounce">easeOutBounce</option>
+                <option value="easeInOutBounce">easeInOutBounce</option>
+            </select>
         </div>
     </div>
     <script src="src/zepto.js"></script>
+    <script src="src/lib.ease.js"></script>
+    <script src="src/lib.transition.js"></script>
 	<script type="text/javascript" src="src/5pageSwitch.js"></script>
     <script>
     var reg=location.search.match(/ts=([^&]*)/),
 		ts=reg&&reg[1]||'flip3d',
 		a=new pageSwitch({
         container: '#pages',
-        transition:ts,
+        loop: true,
+        transition: transitionLib[ts],
+        // transition: 'slide',
+        ease: EaseLib['easeOutElastic']
     });
+    // todo
+    // a.addEase = function (easeInCubic, EaseFn['easeInCubic']);
 
 	document.getElementById('tssel').onchange=function(){
 		location.href='?ts='+this.value;
@@ -208,16 +247,6 @@
 			op.selected=true;
 			break;
 		}
-	}
-
-	function colorRand(){
-		return parseInt(Math.random()*255);
-	}
-
-	function createPage(){
-		var div=document.createElement('div');
-		div.style.backgroundColor='rgb('+colorRand()+','+colorRand()+','+colorRand()+')';
-		return div;
 	}
     </script>
 </body>

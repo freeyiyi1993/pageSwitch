@@ -6,7 +6,7 @@
 ;
 (function(ROOT, struct, undefined){
     "use strict";
-    
+
     var VERSION='2.3.2';
     var lastTime=0,
         nextFrame=ROOT.requestAnimationFrame            ||
@@ -100,7 +100,9 @@
         },
         EASE={
             linear:function(t,b,c,d){ return c*t/d + b; },
-            ease:function(t,b,c,d){ return -c * ((t=t/d-1)*t*t*t - 1) + b; },
+            ease: function(t, b, c, d) {
+                return -c * ((t = t / d - 1) * t * t * t - 1) + b;
+            },
             'ease-in':function(t,b,c,d){ return c*(t/=d)*t*t + b; },
             'ease-out':function(t,b,c,d){ return c*((t=t/d-1)*t*t + 1) + b; },
             'ease-in-out':function(t,b,c,d){ if ((t/=d/2) < 1) return c/2*t*t*t + b; return c/2*((t-=2)*t*t + 2) + b; },
@@ -135,7 +137,7 @@
     each("X Y ".split(" "),function(name){
         var XY={X:'left',Y:'top'},
             fire3D=perspective?' translateZ(0)':'';
-            
+
         TRANSITION['scroll'+name]=function(cpage,cp,tpage,tp){
             var prop=name||['X','Y'][this.direction];
             transform?cpage.style[transform]='translate'+prop+'('+cp*100+'%)'+fire3D:cpage.style[XY[prop]]=cp*100+'%';
@@ -194,7 +196,7 @@
                         }
                     });
                 };
-                    
+
             return function(cpage,cp,tpage,tp){
                 var prop=name||['X','Y'][this.direction],
                     len=prop=='X'?'width':'height',
@@ -348,7 +350,7 @@
                 }
 
                 TRANSITION['slice'+name].apply(this,arguments);
-                
+
                 backDiv.style.display=cp==0||tp==0?'none':'block';
                 backDiv.style.width=backDiv.style.height='100%';
                 backDiv.style[len]=(cp<0?m:100-m)+'%';
@@ -408,7 +410,7 @@
                     tpage.style.zIndex=zIndex;
                 }
             }
-            
+
             TRANSITION['slideCover'+type+name]=function(cpage,cp,tpage,tp){
                 var prop=name||['X','Y'][this.direction],
                     zIndex=Number(type=='In'||!type&&cp<0||type=='Reverse'&&cp>0);
@@ -495,11 +497,11 @@
         if(obj==null){
             return obj+"";
         }
-        
+
         return typeof obj=='object'||typeof obj=='function' ? class2type[toString.call(obj)]||"object" :
             typeof obj;
     }
-	
+
     function isArrayLike(elem){
         var tp=type(elem);
         return !!elem && tp!='function' && tp!='string' && (elem.length===0 || elem.length && (elem.nodeType==1 || (elem.length-1) in elem));
@@ -547,7 +549,7 @@
             }
         }.call(obj,n);
     }
-    
+
     function each(arr, iterate){
         if(isArrayLike(arr)){
             if(type(arr.forEach)=='function'){
@@ -635,7 +637,7 @@
         });
 
         ev.oldEvent=oldEvent;
-        
+
         ev.type=oldEvent.type.toLowerCase();
         ev.eventType=event2type[ev.type]||ev.type;
         ev.eventCode=event2code[ev.type]||0;
@@ -667,14 +669,14 @@
                 ev.clientX=pointer.clientX;
                 ev.clientY=pointer.clientY;
             }
-            
+
             ev.button=which<4?Math.max(0,which-1):button&4&&1||button&2; // left:0 middle:1 right:2
             ev.length=pointerLength(pointers);
         }
 
         return ev;
     }
-    
+
     struct.prototype={
         version:VERSION,
         constructor:struct,
@@ -796,7 +798,7 @@
                 tpage=this.pages[tIndex],
                 target=index>current?-1:1,
                 _tpage=cpage;
-            
+
             cancelFrame(this.timer);
 
             if(fixIndex==current){
@@ -805,7 +807,7 @@
             }else if(tpage.style.display=='none'){
                 percent=0;
             }
-            
+
             this.fixBlock(current,tIndex);
             this.fire('before',current,fixIndex);
             this.current=fixIndex;
@@ -1032,7 +1034,7 @@
             this.container.removeChild(this.comment);
 
             this.length=0;
-            
+
             return this.pause();
         },
         append:function(elem,index){
@@ -1045,7 +1047,7 @@
             });
             this.pages.splice(index,0,elem);
             this.container.appendChild(this.initStyle(elem));
-            
+
             this.length=this.pages.length;
 
             if(index<=this.current){
@@ -1077,7 +1079,7 @@
             return this;
         }
     }
-    
+
     each("Ease Transition".split(" "),function(name){
         struct['add'+name]=struct.prototype['add'+name];
     });
@@ -1087,12 +1089,12 @@
             return struct;
         });
     }else ROOT.pageSwitch=struct;
-	
+
 })(window, function(wrap,config){
     if(!(this instanceof arguments.callee)){
         return new arguments.callee(wrap,config);
     }
-    
+
     this.container=typeof wrap=='string'?document.getElementById(wrap):wrap;
     this.init(config||{});
 });
