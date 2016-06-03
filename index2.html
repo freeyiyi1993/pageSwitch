@@ -13,30 +13,47 @@
     <div id="wrap" class="wrapper">
         <div id="pages">
             <div class="page page1">
-                <h1>可以用用鼠标或者手指拖动页面，亦可使用鼠标滚轮、键盘方向键等</h1>
+                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Facilis tempore iure, dolores, vitae illum ratione vero, sequi aperiam error nisi sapiente exercitationem voluptas soluta harum. Optio velit temporibus a deserunt!</p>
                 <div class="box">
-                    <img src="https://www.baidu.com/img/bd_logo1.png" />
+                    <button onclick="">点击解冻第一页</button>
                 </div>
+                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Facilis tempore iure, dolores, vitae illum ratione vero, sequi aperiam error nisi sapiente exercitationem voluptas soluta harum. Optio velit temporibus a deserunt!</p>
             </div>
             <div class="page page2">
-                <h1>文本</h1>
+                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Facilis tempore iure, dolores, vitae illum ratione vero, sequi aperiam error nisi sapiente exercitationem voluptas soluta harum. Optio velit temporibus a deserunt!</p>
                 <div class="box">
-                    <p>不久前，针对微博用户@Mor-小某的“锤子手机还是不错的！试用后感觉很不错！就是3000多买个它感觉贵了！
-                    定价2600的话还能接受！”这句话，罗永浩在微博上表示“明白，我们考虑一下”。但就在大家还没回过神来的时候，
-                    锤子科技已经迅速宣布了降价，其中16GB 3G版的售价直接下调到了1980元，32G/64G也分别调整到了2080/2480元。</p>
-                    <p>不久前，针对微博用户@Mor-小某的“锤子手机还是不错的！试用后感觉很不错！就是3000多买个它感觉贵了！
-                    定价2600的话还能接受！”这句话，罗永浩在微博上表示“明白，我们考虑一下”。但就在大家还没回过神来的时候，
-                    锤子科技已经迅速宣布了降价，其中16GB 3G版的售价直接下调到了1980元，32G/64G也分别调整到了2080/2480元。</p>
+                    <p>如果当前页是第2页 设置下一页动画为3d。</p>
                 </div>
+                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Facilis tempore iure, dolores, vitae illum ratione vero, sequi aperiam error nisi sapiente exercitationem voluptas soluta harum. Optio velit temporibus a deserunt!</p>
             </div>
             <div class="page page3">
-                <h1>链接图片</h1>
+                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Facilis tempore iure, dolores, vitae illum ratione vero, sequi aperiam error nisi sapiente exercitationem voluptas soluta harum. Optio velit temporibus a deserunt!</p>
+
                 <div class="box">
-                    <a href="https://github.com/qiqiboy"><img src="https://www.baidu.com/img/bd_logo1.png" /></a>
+                    <button>成功进入第四页</button>
+                    <button>失败进入第五页</button>
                 </div>
+                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Facilis tempore iure, dolores, vitae illum ratione vero, sequi aperiam error nisi sapiente exercitationem voluptas soluta harum. Optio velit temporibus a deserunt!</p>
+
             </div>
-            <div class="page page4">page4</div>
-            <div class="page page5">page5</div>
+            <div class="page page4">
+                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Facilis tempore iure, dolores, vitae illum ratione vero, sequi aperiam error nisi sapiente exercitationem voluptas soluta harum. Optio velit temporibus a deserunt!</p>
+
+                <div class="box">
+                    page4: 这是成功页
+                </div>
+                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Facilis tempore iure, dolores, vitae illum ratione vero, sequi aperiam error nisi sapiente exercitationem voluptas soluta harum. Optio velit temporibus a deserunt!</p>
+
+            </div>
+            <div class="page page5">
+                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Facilis tempore iure, dolores, vitae illum ratione vero, sequi aperiam error nisi sapiente exercitationem voluptas soluta harum. Optio velit temporibus a deserunt!</p>
+
+                <div class="box">
+                    page5: 这是失败页
+                </div>
+                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Facilis tempore iure, dolores, vitae illum ratione vero, sequi aperiam error nisi sapiente exercitationem voluptas soluta harum. Optio velit temporibus a deserunt!</p>
+
+            </div>
         </div>
         <div id="ctl">
 			<select id="tssel">
@@ -214,8 +231,8 @@
                 <option value="easeOutBack">easeOutBack</option>
                 <option value="easeInOutBack">easeInOutBack</option>
                 <option value="easeInBounce">easeInBounce</option>
-                <option value="easeOutBounce">easeOutBounce</option>
-                <option value="easeInOutBounce">easeInOutBounce</option>
+                <!-- <option value="easeOutBounce">easeOutBounce</option> -->
+                <!-- <option value="easeInOutBounce">easeInOutBounce</option> -->
             </select>
         </div>
     </div>
@@ -226,19 +243,21 @@
     <script>
     var reg=location.search.match(/ts=([^&]*)/),
 		ts=reg&&reg[1]||'flip3d',
+        ease = location.search.match(/ease=([^&]*)/)&&location.search.match(/ease=([^&]*)/)[1] || 'ease',
 		a=new pageSwitch({
         container: '#pages',
         loop: true,
+        // transition: transitionLib[ts],
         transition: transitionLib[ts],
-        // transition: 'slide',
-        ease: EaseLib['easeOutElastic']
+        ease: EaseLib[ease]
     });
-    // todo
-    // a.addEase = function (easeInCubic, EaseFn['easeInCubic']);
 
 	document.getElementById('tssel').onchange=function(){
-		location.href='?ts='+this.value;
+		location.href='?ts='+this.value + '&ease=' + document.getElementById('ease').value;
 	}
+    document.getElementById('ease').onchange=function(){
+        location.href='?ts='+document.getElementById('tssel').value + '&ease=' + this.value;
+    }
 
 	var options=document.getElementById('tssel').options,
 		i=0,op;
@@ -248,6 +267,14 @@
 			break;
 		}
 	}
+    var optionsEase=document.getElementById('ease').options,
+        j=0,option;
+    while(option=optionsEase[j++]){
+        if(option.value===ease){
+            option.selected=true;
+            break;
+        }
+    }
     </script>
 </body>
 </html>

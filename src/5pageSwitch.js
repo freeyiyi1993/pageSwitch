@@ -96,32 +96,6 @@
             touch:{},
             pointer:{},
             mouse:{}
-        },
-        EASE={
-            ease: function(t, b, c, d) { console.log(t, b, c, d);
-                return -c * ((t = t / d - 1) * t * t * t - 1) + b;
-            }
-        },
-        TRANSITION={
-            /* 更改切换效果
-             * @param Element cpage 当前页面
-             * @param Float cp      当前页面过度百分比
-             * @param Element tpage 前序页面
-             * @param Float tp      前序页面过度百分比
-             */
-            fade:function(cpage,cp,tpage,tp){
-                if(opacity){
-                    cpage.style.opacity=1-Math.abs(cp);
-                    if(tpage){
-                        tpage.style.opacity=Math.abs(cp);
-                    }
-                }else{
-                    cpage.style.filter='alpha(opacity='+(1-Math.abs(cp))*100+')';
-                    if(tpage){
-                        tpage.style.filter='alpha(opacity='+Math.abs(cp)*100+')';
-                    }
-                }
-            }
         };
 
     function camelCase(str){
@@ -229,12 +203,10 @@
     function struct(config) {
         this.init($.extend({
             // default
-            duration:1000,
+            duration: 1000,
             start:0,
             direction:1,
             loop:true,
-            ease:'ease',
-            transition: 'flip',
             freeze:false,
             mouse:true,
             mousewheel:true,
@@ -309,7 +281,7 @@
             return elem;
         },
         setEase:function(ease){
-            this.ease=$.isFunction(ease)?ease:EASE[ease]||EASE.ease;
+            this.ease=ease;
             return this;
         },
         addEase:function(name,func){

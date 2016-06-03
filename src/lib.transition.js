@@ -39,6 +39,25 @@
         var XY={X:'left',Y:'top'},
             fire3D=perspective?' translateZ(0)':'';
 
+        /* 更改切换效果
+         * @param Element cpage 当前页面
+         * @param Float cp      当前页面过度百分比
+         * @param Element tpage 前序页面
+         * @param Float tp      前序页面过度百分比
+         */
+        transitionLib['fade'+name] = function(cpage,cp,tpage,tp){
+            if(opacity){
+                cpage.style.opacity=1-Math.abs(cp);
+                if(tpage){
+                    tpage.style.opacity=Math.abs(cp);
+                }
+            }else{
+                cpage.style.filter='alpha(opacity='+(1-Math.abs(cp))*100+')';
+                if(tpage){
+                    tpage.style.filter='alpha(opacity='+Math.abs(cp)*100+')';
+                }
+            }
+        }
         transitionLib['scroll'+name]=function(cpage,cp,tpage,tp){
             var prop=name||['X','Y'][this.direction];
             transform?cpage.style[transform]='translate'+prop+'('+cp*100+'%)'+fire3D:cpage.style[XY[prop]]=cp*100+'%';

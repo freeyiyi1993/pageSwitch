@@ -2,6 +2,9 @@ window.EaseLib = {
     linear: function(t, b, c, d) {
         return c * t / d + b;
     },
+    ease: function(t, b, c, d) {
+        return -c * ((t = t / d - 1) * t * t * t - 1) + b;
+    },
     'ease-in': function(t, b, c, d) {
         return c * (t /= d) * t * t + b;
     },
