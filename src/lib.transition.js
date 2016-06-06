@@ -402,7 +402,8 @@
             }
 
             transitionLib['skewCover'+type+name]=function(cpage,cp,tpage,tp){
-                var zIndex=Number(type=='In'||!type&&cp<0||type=='Reverse'&&cp>0);
+                // var zIndex=Number(type=='In'||!type&&cp<0||type=='Reverse'&&cp>0);
+                var zIndex = 0;
                 if(transform){
                     zIndex?cp=0:tp=0;
                     cpage.style[transform]='skew'+name+'('+cp*90+'deg)'+fire3D;

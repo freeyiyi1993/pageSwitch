@@ -266,7 +266,7 @@
                 self.events[ev].push(callback);
             })
             $(this.container).on(progressEvents);
-            // 看不懂
+            // 看不懂 end
             this.firePlay();
 
             this.setEase(config.ease);
