@@ -8,6 +8,8 @@
 <meta name="format-detection" content="address=no" />
 <meta name="format-detection" content="telephone=no" />
 <link rel="stylesheet" href="css/style.css" type="text/css" />
+<link rel="stylesheet" href="css/custom.css" type="text/css" />
+
 </head>
 <body>
     <div id="wrap" class="wrapper">
@@ -230,14 +232,16 @@
 		ts=reg&&reg[1]||'flip3d',
         ease = location.search.match(/ease=([^&]*)/)&&location.search.match(/ease=([^&]*)/)[1] || 'ease',
 		a=new pageSwitch('pages',{
-        duration:1000,
+        duration:2000,
         start:0,
         direction:1,
         loop:true,
+        interval: 1000,
         ease: ease,
         transition:ts,
 		freeze:false,
 		mouse:true,
+        autoplay: true,
         mousewheel:true,
         arrowkey:true
     });

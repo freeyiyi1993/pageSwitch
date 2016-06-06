@@ -60,6 +60,7 @@ select {
 	font-weight:inherit;
 	width:auto;
 	overflow:visible;
+	border: 1px solid blue;
 }
 /*because legend doesn't inherit in IE */
 legend {
@@ -113,5 +114,3 @@ body {
 .main{
 	margin:0 auto;
 }
-
-

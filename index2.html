@@ -46,8 +46,8 @@
 
                 <div class="box">
                     page3:
-                    <button>成功进入第四页</button>
-                    <button>失败进入第五页</button>
+                    <button class="goto4">成功进入第四页</button>
+                    <button class="goto5">失败进入第五页</button>
                 </div>
                 <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Facilis tempore iure, dolores, vitae illum ratione vero, sequi aperiam error nisi sapiente exercitationem voluptas soluta harum. Optio velit temporibus a deserunt!</p>
 
@@ -253,6 +253,7 @@
                 <!-- <option value="easeInOutBounce">easeInOutBounce</option> -->
             </select>
         </div>
+
     </div>
     <script src="src/zepto.js"></script>
     <script src="src/lib.ease.js"></script>
@@ -261,37 +262,51 @@
     <script>
     var reg=location.search.match(/ts=([^&]*)/),
 		ts=reg&&reg[1]||'slide',
-        ease = location.search.match(/ease=([^&]*)/)&&location.search.match(/ease=([^&]*)/)[1] || 'ease',
-		a=new pageSwitch({
+        ease = location.search.match(/ease=([^&]*)/)&&location.search.match(/ease=([^&]*)/)[1] || 'ease';
+
+		var a=new pageSwitch({
             container: '#pages',
-            loop: true,
-            start: 1,
+            // loop: 0,
+            interval: 1000,
+            duration: 1000,
+            // start: 1,
+            pager: true,
+            autoplay: 1,
             // freeze: true,
             transition: transitionLib[ts],
             ease: EaseLib[ease]
-        }),
-        suba=new pageSwitch({
+        });
+
+        var suba=new pageSwitch({
             container: '.subslider',
             loop: true,
             start: 0,
             direction:0,
             // freeze: true,
+            arrowkey: 0,
             transition: transitionLib['scrollX'],
-            ease: EaseLib[ease]
-        })
-        suba2=new pageSwitch({
+            ease: EaseLib['ease-out']
+        });
+        var suba2=new pageSwitch({
             container: '.subslider2',
             loop: true,
             start: 0,
             direction:0,
+            arrowkey: 0,
             // freeze: true,
             transition: transitionLib['sliceX'],
-            ease: EaseLib[ease]
+            ease: EaseLib['ease-out']
         });
         $(function(){
             $('.unfreeze').on('click', function() {
                 a.freeze(0);
+            });
+            $('.goto4').on('click', function() {
+                a.slide(3);
             })
+            $('.goto5').on('click', function() {
+                a.slide(4);
+            });
         })
 
 	document.getElementById('tssel').onchange=function(){

@@ -209,6 +209,7 @@
             freeze:false,
             mouse:true,
             mousewheel:true,
+            pager: false,
             arrowkey:true
         }, config));
     }
@@ -224,6 +225,7 @@
                     !self.frozen && self.handleEvent(ev);
                 }
 
+            // 赋值可以变成循环
             this.events={};
             this.container = $(config.container)[0];
             this.duration=isNaN(parseInt(config.duration))?600:parseInt(config.duration);
@@ -238,6 +240,7 @@
             this.frozen=!!config.freeze;
             this.pages=$(this.container).children('div');
             this.length=this.pages.length;
+            this.pager = !!config.pager;
 
             this.pageData=[];
             $(this.container).on(STARTEVENT.join(" ")+" click"+(this.mousewheel?" mousewheel DOMMouseScroll":""),handler);
@@ -245,13 +248,11 @@
 
             $.each(this.pages,function(i, page){
                 self.pageData.push({
-                    percent:0,
-                    cssText:page.style.cssText||''
+                    percent:0
                 });
-                self.initStyle(page);
             });
-            this.pages[this.current].style.display='block';
-
+            $(this.pages).eq(this.current).css({display: 'block'});
+            // 看不懂
             var progressEvents = {
                 before:function(){clearTimeout(this.playTimer);},
                 dragStart:function(){clearTimeout(this.playTimer);removeRange();},
@@ -265,19 +266,33 @@
                 self.events[ev].push(callback);
             })
             $(this.container).on(progressEvents);
+            // 看不懂
             this.firePlay();
 
             this.setEase(config.ease);
             this.setTransition(config.transition);
+
+            if (this.pager) {
+                this.generatorPager();
+            }
         },
-        initStyle:function(elem){
-            var style=elem.style,
-                ret;
-            $.each("position:absolute;top:0;left:0;width:100%;height:100%;display:none".split(";"),function(i, css){
-                ret=css.split(":");
-                style[ret[0]]=ret[1];
-            });
-            return elem;
+        // initStyle:function(elem){
+        //     var style=elem.style,
+        //         ret;
+        //     $.each("position:absolute;top:0;left:0;width:100%;height:100%;display:none".split(";"),function(i, css){
+        //         ret=css.split(":");
+        //         style[ret[0]]=ret[1];
+        //     });
+        //     return elem;
+        // },
+        generatorPager: function() {
+            var pager = '<ul id="pager"></ul>',
+                html = '';
+
+            for (var i = 0; i < this.length; i++) {
+                html += i === 0 ? '<li class="active"></li>' : '<li></li>';
+            }
+            $(this.container).after($(pager).append(html));
         },
         setEase:function(ease){
             this.ease=ease;
@@ -329,6 +344,12 @@
 
             cancelFrame(this.timer);
 
+            // 处理分页
+            if (this.pager) {
+                $('#pager .active').removeClass('active');
+                $('#pager li').eq(index % this.length).addClass('active');
+            }
+
             if(fixIndex==current){
                 target=0;
                 _tpage=tpage;
@@ -378,7 +399,7 @@
             var self=this;
             if(this.playing){
                 this.playTimer=setTimeout(function(){
-                    self.slide((self.current+1)%(self.loop?Infinity:self.length));
+                    self.slide(self.current+1);
                 },this.interval);
             }
             return this;
