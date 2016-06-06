@@ -25,8 +25,7 @@
                 ROOT.mozCancelRequestAnimationFrame     ||
                 ROOT.msCancelRequestAnimationFrame      ||
                 clearTimeout,
-        DOC=ROOT.document,
-        divstyle=DOC.createElement('div').style,
+        divstyle=document.createElement('div').style,
         cssVendor=function(){
             var tests="-webkit- -moz- -o- -ms-".split(" "),
                 prop;
@@ -144,7 +143,7 @@
             if('empty' in range)range.empty();
             else if('removeAllRanges' in range)range.removeAllRanges();
         }else{
-            DOC.selection.empty();
+            document.selection.empty();
         }
     }
 
@@ -165,7 +164,7 @@
         ev.eventCode=event2code[ev.type]||0;
         ev.pointerType=POINTERTYPES[oldEvent.pointerType]||oldEvent.pointerType||ev.eventType;
 
-        ev.target=oldEvent.target||oldEvent.srcElement||DOC.documentElement;
+        ev.target=oldEvent.target||oldEvent.srcElement||document.documentumentElement;
         if(ev.target.nodeType===3){
             ev.target=ev.target.parentNode;
         }
@@ -221,6 +220,7 @@
         init:function(config){
             var self=this,
                 handler=this.handler=function(ev){
+                    ev.stopPropagation();
                     !self.frozen && self.handleEvent(ev);
                 }
 
@@ -240,7 +240,6 @@
             this.length=this.pages.length;
 
             this.pageData=[];
-
             $(this.container).on(STARTEVENT.join(" ")+" click"+(this.mousewheel?" mousewheel DOMMouseScroll":""),handler);
             $(window).on(MOVEEVENT.join(" ")+(this.arrowkey?" keydown":""),handler);
 
@@ -289,7 +288,7 @@
             return this;
         },
         setTransition:function(transition){
-            this.events.update.splice(0,1,$.isFunction(transition)?transition:TRANSITION[transition]||TRANSITION.slide);
+            this.events.update.splice(0,1,transition);
             return this;
         },
         addTransition:function(name,func){
@@ -423,14 +422,15 @@
             if(position&&position!='static'){
                 return this.container;
             }
-            return this.container.offsetParent||DOC.body;
+            return this.container.offsetParent||document.body;
         },
         handleEvent:function(oldEvent){
             var ev=filterEvent(oldEvent),
                 canDrag=ev.button<1&&ev.length<2&&(!this.pointerType||this.pointerType==ev.eventType)&&(this.mouse||ev.pointerType!='mouse');
 
+            // console.log(ev.eventCode, ev.type);
             switch(ev.eventCode){
-                case 2:
+                case 2:// mousemove touchmove
                     if(canDrag&&this.rect){
                         var cIndex=this.current,
                             dir=this.direction,
@@ -458,8 +458,8 @@
                     }
                     break;
 
-                case 1:
-                case 3:
+                case 1:// mousedown touchstart
+                case 3:// mouseup touchend
                     if(canDrag){
                         var self=this,
                             index=this.current,
@@ -511,13 +511,13 @@
                     }
                     break;
 
-                case 4:
+                case 4:// click
                     if(this.timer){
                         ev.preventDefault();
                     }
                     break;
 
-                case 5:
+                case 5:// mousewheel
                     ev.preventDefault();
                     if(this.isStatic() && +new Date-this.latestTime>Math.max(1000-this.duration,0)){
                         var wd=ev.wheelDelta||-ev.detail;
@@ -525,7 +525,7 @@
                     }
                     break;
 
-                case 6:
+                case 6:// keydown
                     var nn=ev.target.nodeName.toLowerCase();
                     if(this.isStatic() && nn!='input' && nn!='textarea' && nn!='select'){
                         switch(ev.keyCode||ev.which){
@@ -556,7 +556,7 @@
 
 
             $(this.container).off(STARTEVENT.join(" ")+" click"+(this.mousewheel?" mousewheel DOMMouseScroll":""),this.handler);
-            $(DOC).off(MOVEEVENT.join(" ")+(this.arrowkey?" keydown":""),this.handler);
+            $(document).off(MOVEEVENT.join(" ")+(this.arrowkey?" keydown":""),this.handler);
 
             $.each(this.pages,function(index, page){
                 page.style.cssText=pageData[index].cssText;

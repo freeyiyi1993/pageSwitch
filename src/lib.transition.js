@@ -45,7 +45,7 @@
          * @param Element tpage 前序页面
          * @param Float tp      前序页面过度百分比
          */
-        transitionLib['fade'+name] = function(cpage,cp,tpage,tp){
+        transitionLib['fade'] = function(cpage,cp,tpage,tp){
             if(opacity){
                 cpage.style.opacity=1-Math.abs(cp);
                 if(tpage){
@@ -58,6 +58,7 @@
                 }
             }
         }
+
         transitionLib['scroll'+name]=function(cpage,cp,tpage,tp){
             var prop=name||['X','Y'][this.direction];
             transform?cpage.style[transform]='translate'+prop+'('+cp*100+'%)'+fire3D:cpage.style[XY[prop]]=cp*100+'%';
@@ -65,6 +66,35 @@
                 transform?tpage.style[transform]='translate'+prop+'('+tp*100+'%)'+fire3D:tpage.style[XY[prop]]=tp*100+'%';
             }
         }
+        // rotate
+        transitionLib['rotate']=function(cpage,cp,tpage,tp){
+            var inited = false;
+
+            cpage.style.opacity=1-Math.abs(cp);
+            if(tpage){
+                if (!inited) {
+                    inited = 1;
+                    tpage.style[transformOrigin] = 'center';
+                }
+                tpage.style[transform] = 'rotate3d(0, 0, 1, -' + 200 * (1 - Math.abs(cp)) + 'deg)';
+                tpage.style.opacity = Math.abs(cp);
+            }
+        }
+        transitionLib['rotate3d']=function(cpage,cp,tpage,tp){
+            var inited = false;
+
+            cpage.style.opacity=1-Math.abs(cp);
+            if(tpage){
+                if (!inited) {
+                    inited = 1;
+                    tpage.style[transformOrigin] = 'center';
+                }
+                tpage.style[transform] = 'rotate3d(0, 0, 1, -' + 500 * (1 - Math.abs(cp)) + 'deg) scale3d('+ Math.abs(cp) +','+ Math.abs(cp)+','+ Math.abs(cp)+')';
+                tpage.style.opacity = Math.abs(cp);
+            }
+        }
+
+        // rotate
 
         transitionLib['scroll3d'+name]=function(cpage,cp,tpage,tp){
             var prop=name||['X','Y'][this.direction],
@@ -101,7 +131,7 @@
 
         transitionLib['slice'+name]=function(){
             var createWrap=function(node,container){
-                    var wrap=DOC.createElement('div');
+                    var wrap=document.createElement('div');
                     wrap.style.cssText='position:absolute;top:0;left:0;height:100%;width:100%;overflow:hidden;';
                     wrap.appendChild(node);
                     container.appendChild(wrap);
@@ -188,7 +218,7 @@
                         origin=['50%',(off?0:100)+'%'][prop=='X'?'slice':'reverse']().join(' ');
 
                     if(!wrap||wrap==container){
-                        wrap=DOC.createElement('div');
+                        wrap=document.createElement('div');
                         wrap.style.cssText='position:absolute;top:0;left:0;height:100%;width:100%;overflow:hidden;display:none;';
                         wrap.style[transformOrigin]=origin;
                         wrap.style[backfaceVisibility]='hidden';
@@ -261,7 +291,7 @@
                     len=prop=='X'?'width':'height',
                     m=Math.abs(cp)*100;
                 if(!backDiv){
-                    backDiv=DOC.createElement('div');
+                    backDiv=document.createElement('div');
                     backDiv.style.cssText='position:absolute;z-index:2;top:0;left:0;height:0;width:0;background:no-repeat #fff;';
                     try{
                         backDiv.style.backgroundImage=cssVendor+'linear-gradient('+(prop=='X'?'right':'bottom')+', #aaa 0,#fff 20px)';
@@ -407,7 +437,7 @@
                         tpage.style[transform]='scale'+name+'('+(1+Math.abs(tp))+')'+fire3D;
                         tpage.style.zIndex=zIndex;
                     }
-                    TRANSITION.fade.apply(this,arguments);
+                    transitionLib.fade.apply(this,arguments);
                 }else transitionLib['scroll'+name].apply(this,arguments);
             }
         });

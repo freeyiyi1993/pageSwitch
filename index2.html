@@ -8,6 +8,7 @@
 <meta name="format-detection" content="address=no" />
 <meta name="format-detection" content="telephone=no" />
 <link rel="stylesheet" href="css/style.css" type="text/css" />
+<link rel="stylesheet" href="css/custom.css" type="text/css" />
 </head>
 <body>
     <div id="wrap" class="wrapper">
@@ -15,21 +16,36 @@
             <div class="page page1">
                 <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Facilis tempore iure, dolores, vitae illum ratione vero, sequi aperiam error nisi sapiente exercitationem voluptas soluta harum. Optio velit temporibus a deserunt!</p>
                 <div class="box">
-                    <button onclick="">点击解冻第一页</button>
+                    <button class="unfreeze" onclick="">点击解冻第一页</button>
                 </div>
                 <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Facilis tempore iure, dolores, vitae illum ratione vero, sequi aperiam error nisi sapiente exercitationem voluptas soluta harum. Optio velit temporibus a deserunt!</p>
             </div>
             <div class="page page2">
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Facilis tempore iure, dolores, vitae illum ratione vero, sequi aperiam error nisi sapiente exercitationem voluptas soluta harum. Optio velit temporibus a deserunt!</p>
+                <p>page2: 这里有一个横向的slider</p>
                 <div class="box">
-                    <p>如果当前页是第2页 设置下一页动画为3d。</p>
+                    <div class="subsliderWrapper">
+                        <div class="subslider">
+                            <div class="page page4">page1</div>
+                            <div class="page page2">page2</div>
+                            <div class="page page3">page3</div>
+                        </div>
+                    </div>
+                    <p>page2: 这里有另一个横向的slider</p>
+                    <div class="subsliderWrapper">
+                        <div class="subslider2">
+                            <div class="page page1">page1</div>
+                            <div class="page page2">page2</div>
+                            <div class="page page3">page3</div>
+                        </div>
+                    </div>
+
                 </div>
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Facilis tempore iure, dolores, vitae illum ratione vero, sequi aperiam error nisi sapiente exercitationem voluptas soluta harum. Optio velit temporibus a deserunt!</p>
             </div>
             <div class="page page3">
                 <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Facilis tempore iure, dolores, vitae illum ratione vero, sequi aperiam error nisi sapiente exercitationem voluptas soluta harum. Optio velit temporibus a deserunt!</p>
 
                 <div class="box">
+                    page3:
                     <button>成功进入第四页</button>
                     <button>失败进入第五页</button>
                 </div>
@@ -58,7 +74,9 @@
         <div id="ctl">
 			<select id="tssel">
 				<option value="">选择切页效果</option>
-				<option value="fade">fade</option>
+                <option value="fade">fade</option>
+                <option value="rotate">rotate</option>
+                <option value="rotate3d">rotate3d</option>
 				<optgroup label="滚动效果">
 					<option value="scroll">scroll</option>
 					<option value="scroll3d">scroll3d</option>
@@ -242,15 +260,39 @@
 	<script type="text/javascript" src="src/5pageSwitch.js"></script>
     <script>
     var reg=location.search.match(/ts=([^&]*)/),
-		ts=reg&&reg[1]||'flip3d',
+		ts=reg&&reg[1]||'slide',
         ease = location.search.match(/ease=([^&]*)/)&&location.search.match(/ease=([^&]*)/)[1] || 'ease',
 		a=new pageSwitch({
-        container: '#pages',
-        loop: true,
-        // transition: transitionLib[ts],
-        transition: transitionLib[ts],
-        ease: EaseLib[ease]
-    });
+            container: '#pages',
+            loop: true,
+            start: 1,
+            // freeze: true,
+            transition: transitionLib[ts],
+            ease: EaseLib[ease]
+        }),
+        suba=new pageSwitch({
+            container: '.subslider',
+            loop: true,
+            start: 0,
+            direction:0,
+            // freeze: true,
+            transition: transitionLib['scrollX'],
+            ease: EaseLib[ease]
+        })
+        suba2=new pageSwitch({
+            container: '.subslider2',
+            loop: true,
+            start: 0,
+            direction:0,
+            // freeze: true,
+            transition: transitionLib['sliceX'],
+            ease: EaseLib[ease]
+        });
+        $(function(){
+            $('.unfreeze').on('click', function() {
+                a.freeze(0);
+            })
+        })
 
 	document.getElementById('tssel').onchange=function(){
 		location.href='?ts='+this.value + '&ease=' + document.getElementById('ease').value;
